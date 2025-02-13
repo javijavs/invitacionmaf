@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación Especial</title>
+    <style>
+        /* Estilos generales */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f8f8;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            color: #333;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Contenedor para la invitación */
+        .invitacion {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Estilo para la pregunta */
+        h3 {
+            font-size: 28px;
+            color: #d24d57;
+            font-weight: normal;
+            font-family: 'Dancing Script', cursive;
+            margin-bottom: 30px; /* Espacio debajo de la pregunta */
+            margin-top: 0; /* Mover la pregunta más hacia arriba */
+        }
+
+        /* Estilo para los botones */
+        .btn {
+            background-color: #d24d57;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 200px;
+            margin: 10px; /* Añadir espacio entre los botones */
+        }
+
+        /* Botón "Sí mi amor" */
+        .btn-si {
+            background-color: #d24d57;
+        }
+
+        .btn-si:hover {
+            background-color: #b13c46;
+        }
+
+        /* Botón "No" */
+        .btn-no {
+            background-color: #ff6b6b;
+        }
+
+        .btn-no:hover {
+            background-color: #ff3f3f;
+        }
+
+        /* Estilo para el contenedor de los botones */
+        .contenedor-botones {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* Estilo para el botón "No" que se moverá aleatoriamente */
+        #boton-no {
+            position: absolute; /* Esto lo hace moverse libremente por la pantalla */
+        }
+
+        /* Estilo para el mensaje "Te amo" */
+        #mensaje {
+            font-size: 36px;
+            font-family: 'Dancing Script', cursive;
+            color: #d24d57;
+            display: none; /* Esconde el mensaje al principio */
+            margin-top: 30px;
+            animation: mostrarMensaje 2s forwards;
+        }
+
+        /* Animación para mostrar el mensaje */
+        @keyframes mostrarMensaje {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Estilo para los girasoles animados */
+        .girasol {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-image: url('https://www.transparentpng.com/download/sunflower-png-cq7ptm.png');
+            background-size: cover;
+            animation: girasol 5s ease-in-out infinite;
+        }
+
+        @keyframes girasol {
+            0% { transform: translate(0, 0) rotate(0); }
+            50% { transform: translate(200px, 200px) rotate(180deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Contenedor para la pregunta -->
+    <div class="invitacion">
+        <h3>¿Quieres ser mi Valentine?</h3>
+        
+        <!-- Contenedor de los botones en línea -->
+        <div class="contenedor-botones">
+            <!-- Botón "Sí mi amor" -->
+            <button class="btn btn-si" onclick="aceptar()">Sí, mi amor</button>
+            <!-- Botón "No" -->
+            <button class="btn btn-no" onclick="rechazar()" id="boton-no">No</button>
+        </div>
+    </div>
+
+    <!-- Mensaje "Te amo" -->
+    <div id="mensaje">Te amo, tenemos una cita sabado en la noche<3</div>
+
+    <!-- Canvas para el confetti -->
+    <canvas id="confetti"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti"></script>
+
+    <script>
+        // Función cuando se acepta la invitación
+        function aceptar() {
+            // Mostrar el mensaje "Te amo"
+            const mensaje = document.getElementById("mensaje");
+            mensaje.style.display = "block"; // Mostrar el mensaje
+
+            // Llamar a la función que genera el confetti
+            lanzarConfetti();
+
+            // Hacer que el botón "No" se elimine
+            const botonNo = document.getElementById("boton-no");
+            botonNo.style.display = "none";  // Elimina el botón "No"
+
+            // Crear girasoles animados
+            crearGirasoles();
+        }
+
+        // Función cuando se rechaza la invitación
+        function rechazar() {
+            const botonNo = document.getElementById("boton-no");
+            botonNo.disabled = true;  // Desactiva el botón "No"
+            botonNo.innerHTML = "¡No puedes escaparte!";  // Cambia el texto después de que se haga clic
+
+            // Llamar a la función que mueve el botón aleatoriamente
+            moverBotonAleatoriamente(botonNo);
+        }
+
+        // Función para lanzar el confetti
+        function lanzarConfetti() {
+            const confettiCanvas = document.getElementById('confetti');
+            const confetti = canvasConfetti.create(confettiCanvas, {
+                resize: true, // Redimensiona el canvas con la ventana
+                useWorker: true
+            });
+
+            // Lanzar el confetti
+            confetti({
+                particleCount: 200,
+                spread: 200,
+                origin: { x: 0.5, y: 0.5 }
+            });
+        }
+
+        // Función para crear girasoles animados
+        function crearGirasoles() {
+            for (let i = 0; i < 5; i++) {
+                const girasol = document.createElement("div");
+                girasol.classList.add("girasol");
+                girasol.style.left = `${Math.random() * window.innerWidth}px`; // Posición aleatoria en el eje X
+                girasol.style.top = `${Math.random() * window.innerHeight}px`;  // Posición aleatoria en el eje Y
+                document.body.appendChild(girasol);
+            }
+        }
+
+        // Función para mover el botón "No" aleatoriamente dentro de los límites de la pantalla
+        function moverBotonAleatoriamente(boton) {
+            // Obtener las dimensiones de la ventana y el tamaño del botón
+            const bodyWidth = window.innerWidth; // Ancho de la ventana
+            const bodyHeight = window.innerHeight; // Alto de la ventana
+            const botonWidth = boton.offsetWidth; // Ancho del botón
+            const botonHeight = boton.offsetHeight; // Alto del botón
+
+            // Asegurarse de que el botón se quede dentro de los límites de la ventana
+            const maxX = bodyWidth - botonWidth;
+            const maxY = bodyHeight - botonHeight;
+
+            // Mover el botón aleatoriamente dentro de los límites de la pantalla
+            setInterval(function() {
+                const randomX = Math.random() * maxX;  // Posición aleatoria en el eje X
+                const randomY = Math.random() * maxY;  // Posición aleatoria en el eje Y
+
+                boton.style.left = randomX + 'px';
+                boton.style.top = randomY + 'px';
+            }, 500); // Cada medio segundo mueve el botón a una nueva posición
+        }
+    </script>
+
+</body>
+</html>
